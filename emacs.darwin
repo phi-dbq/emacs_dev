@@ -1,15 +1,15 @@
 #!/bin/bash
 
 # This version works with the homebrew build of emacs
-emacs_root="$(brew --prefix emacs)"
 emacs_server_pattern="Emacs.app/Contents/MacOS/Emacs"
 
-emacs_server="${emacs_root}/${emacs_server_pattern}"
-emacs_client="${emacs_root}/bin/emacsclient"
+# Using the cask version of Emacs
+emacs_server="/Applications/${emacs_server_pattern}"
+emacs_client="/usr/local/bin/emacsclient"
 
 if [[ $# -gt 1 ]]; then
     if [ "$1" == "-batch" ] || [ "$1" == "--batch" ]; then
-	echo "Emacs compiler mode with: $@"
+	#echo "Emacs compiler mode with: '$emacs_server $@'"
 	$emacs_server "$@"
 	exit 
     fi
