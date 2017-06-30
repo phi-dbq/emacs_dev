@@ -16,8 +16,9 @@
   (set-frame-position (selected-frame) 500 0) ;; in pixels
 
   ;; (message "Setting up font")
-  ;; (set-face-attribute 'default nil :family "Consolas")
-  ;; (set-face-attribute 'default nil :height 160)
+  (set-face-attribute 'default nil :family "Hack")
+  (set-face-attribute 'default nil :height 140)
   )
+
 
 (add-hook 'after-make-frame-functions 'frame-size-and-position-fonc)

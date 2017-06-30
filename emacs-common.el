@@ -52,6 +52,7 @@
   '(helm s company magit projectile dash async 
          use-package evil helm-flx swiper-helm
          web-mode ess lua-mode z3-mode
+	 markdown-mode
          ensime sbt-mode elpy
          solarized-theme)
   "A list of dependencies to be installed")
@@ -125,6 +126,18 @@
   (setq eshell-output-filter-functions (remove 'eshell-handle-ansi-color eshell-output-filter-functions))
   )
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;--------------------------------------------------------------------
+;; Document Editing
+(use-package markdown-mode
+  :ensure t
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown"))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;--------------------------------------------------------------------
 ;; Programming Language Environment
@@ -139,6 +152,23 @@
 (setq python-shell-interpreter-args "--simple-prompt --pprint")
 (setq python-shell-prompt-detect-enabled nil)
 (setq python-shell-prompt-detect-failure-warning nil)
+
+;; Configure flymake for python
+(when (load "flymake" t)
+  (defun flymake-pylint-init ()
+    (let* ((temp-file (flymake-init-create-temp-buffer-copy
+                       'flymake-create-temp-inplace))
+           (local-file (file-relative-name
+                        temp-file
+                        (file-name-directory buffer-file-name))))
+      (list "epylint" (list local-file))))
+
+  (add-to-list 'flymake-allowed-file-name-masks
+               '("\\.py\\'" flymake-pylint-init)))
+
+;; Set as a minor mode for python
+(add-hook 'python-mode-hook '(lambda () (flymake-mode)))
+
 
 ;; https://github.com/emacs-mirror/emacs/commit/dbb341022870ecad4c9177485a6770a355633cc0
 (defun python-shell-completion-native-try ()

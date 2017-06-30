@@ -25,3 +25,6 @@
 [submodule "org-mode"]
 	path = org-mode
 	url = git://orgmode.org/org-mode.git
+[submodule "emacs-scala-mode"]
+	path = emacs-scala-mode
+	url = https://github.com/ensime/emacs-scala-mode.git
