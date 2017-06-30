@@ -8,10 +8,10 @@ emacs_server="/Applications/${emacs_server_pattern}"
 emacs_client="/usr/local/bin/emacsclient"
 
 if [[ $# -gt 1 ]]; then
-    if [ "$1" == "-batch" ] || [ "$1" == "--batch" ]; then
-	#echo "Emacs compiler mode with: '$emacs_server $@'"
-	$emacs_server "$@"
-	exit 
+    if [[ "$1" == "-batch" ]] || [[ "$1" == "--batch" ]] || [[ "$1" == "-Q" ]]; then
+	    #echo "Emacs compiler mode with: '$emacs_server $@'"
+	    exec "${emacs_server}" "$@"
+	    exit 
     fi
 fi
 
