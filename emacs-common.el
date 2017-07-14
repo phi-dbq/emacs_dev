@@ -153,6 +153,8 @@
 (setq python-shell-prompt-detect-enabled nil)
 (setq python-shell-prompt-detect-failure-warning nil)
 
+(add-to-list 'auto-mode-alist '("BUILD\\'" . python-mode))
+
 ;; Configure flymake for python
 (when (load "flymake" t)
   (defun flymake-pylint-init ()
