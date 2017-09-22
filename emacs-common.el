@@ -52,7 +52,8 @@
   '(helm s company magit projectile dash async
          use-package evil helm-flx swiper-helm
          web-mode ess lua-mode z3-mode
-	 markdown-mode
+         flycheck
+         markdown-mode
          ensime sbt-mode elpy
          solarized-theme)
   "A list of dependencies to be installed")
@@ -148,6 +149,7 @@
 (setq elpy-rpc-python-command "python3")  ;; use a default python
 (setq elpy-rpc-backend "jedi")
 (elpy-use-ipython "ipython3")
+(setq elpy-syntax-check-command "pylint")
 (setq python-shell-interpreter "ipython3")
 (setq python-shell-interpreter-args "--simple-prompt --pprint")
 (setq python-shell-prompt-detect-enabled nil)
@@ -261,7 +263,13 @@
 ;;         :tags-as-categories nil)
 ;;        ))
 
-
+(use-package markdown-mode
+  :ensure t
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown"))
 
 ;; web-mode @ http://web-mode.org
 (use-package web-mode
@@ -279,6 +287,20 @@
 (load (concat elisp_path "/prfgnrl/generic/proof-site.el"))
 ;;(setq auto-mode-alist (cons '("\\.v$" . coq-mode) auto-mode-alist))
 ;; (autoload 'coq-mode "coq" "Major mode for editing Coq vernacular." t)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Flycheck http://www.flycheck.org/en/latest/
+(package-install 'flycheck)
+(global-flycheck-mode)
+
+(package-install 'flycheck-color-mode-line)
+(eval-after-load "flycheck"
+  '(add-hook 'flycheck-mode-hook 'flycheck-color-mode-line-mode))
+
+(package-install 'flycheck-pos-tip)
+(eval-after-load 'flycheck
+  (flycheck-pos-tip-mode))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Flyspell for spell checking
@@ -303,6 +325,9 @@
 ;; Substitude certain patterns (Greek letters or math symbols)
 ;; with unicode
 (load "emacs-rc-pretty-lambda.el")
+
+;; Removing trailing white spaces when saving
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; global variables
 (setq
